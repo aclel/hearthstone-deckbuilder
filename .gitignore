@@ -1,0 +1,5 @@
+
+# elm-stuff where all the built code is stored
+/elm-stuff
+
+*.DS_Store
