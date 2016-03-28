@@ -7,3 +7,5 @@ type Action
     = NoOp
     | AddCard Card -- Triggered from outside Deck
     | RemoveCard Card
+    | CardAdded Card
+    | CardRemoved Card

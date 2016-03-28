@@ -3,10 +3,16 @@ module Deck.Update  (initialModelAndEffects, update) where
 import Common.Model exposing (Card)
 import Effects exposing (Effects, Never)
 import Task exposing (Task)
+import Library.Util exposing (actionEffect)
 import List.Extra exposing (elemIndex)
-import Deck.Action exposing (Action(NoOp, AddCard, RemoveCard))
+import Deck.Action exposing (Action(NoOp, AddCard, RemoveCard, CardAdded, CardRemoved))
 import Deck.Model exposing (Model, initialModel)
 
+
+type alias Services =
+    { signalCardAdded : Card -> Action -> Effects Action
+    , signalCardRemoved : Card -> Action -> Effects Action
+    }
 
 initialModelAndEffects : ( Model, Effects Action )
 initialModelAndEffects =
@@ -15,17 +21,24 @@ initialModelAndEffects =
     )
 
 
-update : Action -> Model -> ( Model, Effects Action )
-update action model =
+update : Services -> Action -> Model -> ( Model, Effects Action )
+update services action model =
     case action of
         NoOp ->
             ( model, Effects.none )
 
         AddCard card ->
-            ( model ++ [ card ], Effects.none )
+            ( model ++ [ card ], actionEffect (CardAdded card) )
 
         RemoveCard card ->
-            ( removeFromList (elemIndex card model) model, Effects.none )
+            ( removeFromList (elemIndex card model) model, actionEffect (CardRemoved card) )
+
+        CardAdded card ->
+            ( model, services.signalCardAdded card NoOp )
+
+        CardRemoved card ->
+            ( model, services.signalCardRemoved card NoOp )
+
 
 -- Remove element at index i from list
 removeFromList : Maybe Int -> List Card -> List Card

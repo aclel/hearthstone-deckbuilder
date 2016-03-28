@@ -11,7 +11,10 @@ import Deck.View exposing (view)
 
 type alias Config =
     { inputs : List (Signal.Signal Action)
-    , outputs : {}
+    , outputs : 
+        { onCardAdded : List (Signal.Address Card)
+        , onCardRemoved : List (Signal.Address Card)
+        }
     }
 
 type alias DeckFeature =
@@ -22,7 +25,11 @@ createDeckFeature : Config -> DeckFeature
 createDeckFeature config =
     start
         { init = initialModelAndEffects
-        , update = update
+        , update =
+            update
+                { signalCardAdded = broadcast config.outputs.onCardAdded
+                , signalCardRemoved = broadcast config.outputs.onCardRemoved
+                }
         , view = view
         , inputs = config.inputs
         }

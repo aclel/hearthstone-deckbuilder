@@ -3,7 +3,7 @@ module CardList.Update (update) where
 import Common.Model exposing (Card)
 import Effects exposing (Effects, Never)
 import Task exposing (Task)
-import CardList.Action exposing (Action(NoOp, LoadList, ShowList, CardClicked))
+import CardList.Action exposing (Action(NoOp, LoadList, ShowList, CardClicked, CardAdded, CardRemoved ))
 import CardList.Model exposing (Model, initialModel)
 
 
@@ -31,3 +31,13 @@ update services action model =
 
         CardClicked card ->
             ( model, services.signalCardClicked card NoOp )
+
+        CardAdded card ->
+            -- Need to update numCopies on card in model
+            ( model, Effects.none )
+
+        CardRemoved card ->
+            -- Need to update numCopies on card in model
+            ( model, Effects.none)
+
+

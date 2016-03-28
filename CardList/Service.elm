@@ -10,11 +10,13 @@ import CardList.Model exposing (Model)
 
 cardDecoder : Json.Decoder Card
 cardDecoder =
-    Json.object4 Card
+    Json.object6 Card
         (Json.oneOf[ "cardId" := Json.string, Json.succeed "No card Id"])
         (Json.oneOf[ "name" := Json.string, Json.succeed "No name" ])
         (Json.oneOf[ "cost" := Json.int, Json.succeed 0])
         (Json.oneOf[ "img" := Json.string, Json.succeed "assets/not_available.png" ])
+        (Json.oneOf[ "maxCopies" := Json.int, Json.succeed 2])
+        (Json.oneOf[ "numCopies" := Json.int, Json.succeed 0])
 
 
 decodeCardList : Json.Decoder (List Card)

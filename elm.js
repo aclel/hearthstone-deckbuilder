@@ -11547,8 +11547,13 @@ Elm.Common.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var testCard = {cardId: "TEST123",name: "Test Card",cost: 0,img: "http://wow.zamimg.com/images/hearthstone/cards/enus/original/HERO_09.png"};
-   var Card = F4(function (a,b,c,d) {    return {cardId: a,name: b,cost: c,img: d};});
+   var testCard = {cardId: "TEST123"
+                  ,name: "Test Card"
+                  ,cost: 0
+                  ,img: "http://wow.zamimg.com/images/hearthstone/cards/enus/original/HERO_09.png"
+                  ,maxCopies: 2
+                  ,numCopies: 0};
+   var Card = F6(function (a,b,c,d,e,f) {    return {cardId: a,name: b,cost: c,img: d,maxCopies: e,numCopies: f};});
    return _elm.Common.Model.values = {_op: _op,testCard: testCard,Card: Card};
 };
 Elm.CardList = Elm.CardList || {};
@@ -11588,11 +11593,19 @@ Elm.CardList.Action.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var CardRemoved = function (a) {    return {ctor: "CardRemoved",_0: a};};
+   var CardAdded = function (a) {    return {ctor: "CardAdded",_0: a};};
    var CardClicked = function (a) {    return {ctor: "CardClicked",_0: a};};
    var ShowList = function (a) {    return {ctor: "ShowList",_0: a};};
    var LoadList = {ctor: "LoadList"};
    var NoOp = {ctor: "NoOp"};
-   return _elm.CardList.Action.values = {_op: _op,NoOp: NoOp,LoadList: LoadList,ShowList: ShowList,CardClicked: CardClicked};
+   return _elm.CardList.Action.values = {_op: _op
+                                        ,NoOp: NoOp
+                                        ,LoadList: LoadList
+                                        ,ShowList: ShowList
+                                        ,CardClicked: CardClicked
+                                        ,CardAdded: CardAdded
+                                        ,CardRemoved: CardRemoved};
 };
 Elm.Library = Elm.Library || {};
 Elm.Library.Util = Elm.Library.Util || {};
@@ -11640,12 +11653,14 @@ Elm.CardList.Service.make = function (_elm) {
    var _op = {};
    var errorMessage = $Basics.always($Task.succeed({cards: _U.list([]),message: "An error has occurred."}));
    var intoModel = function (cards) {    return {cards: cards,message: ""};};
-   var cardDecoder = A5($Json$Decode.object4,
+   var cardDecoder = A7($Json$Decode.object6,
    $Common$Model.Card,
    $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"cardId",$Json$Decode.string),$Json$Decode.succeed("No card Id")])),
    $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"name",$Json$Decode.string),$Json$Decode.succeed("No name")])),
    $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"cost",$Json$Decode.$int),$Json$Decode.succeed(0)])),
-   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"img",$Json$Decode.string),$Json$Decode.succeed("assets/not_available.png")])));
+   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"img",$Json$Decode.string),$Json$Decode.succeed("assets/not_available.png")])),
+   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"maxCopies",$Json$Decode.$int),$Json$Decode.succeed(2)])),
+   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"numCopies",$Json$Decode.$int),$Json$Decode.succeed(0)])));
    var decodeCardList = $Json$Decode.list(cardDecoder);
    var loadCardsHttp = A2($Task.map,
    intoModel,
@@ -11689,7 +11704,9 @@ Elm.CardList.Update.make = function (_elm) {
                                  ,_1: $Effects.task(A2($Task.map,$CardList$Action.ShowList,services.loadCards))};
          case "ShowList": var _p1 = _p0._0;
            return {ctor: "_Tuple2",_0: _p1,_1: A2(services.signalUpdatedList,_p1.cards,$CardList$Action.NoOp)};
-         default: return {ctor: "_Tuple2",_0: model,_1: A2(services.signalCardClicked,_p0._0,$CardList$Action.NoOp)};}
+         case "CardClicked": return {ctor: "_Tuple2",_0: model,_1: A2(services.signalCardClicked,_p0._0,$CardList$Action.NoOp)};
+         case "CardAdded": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
    });
    var Services = F3(function (a,b,c) {    return {loadCards: a,signalUpdatedList: b,signalCardClicked: c};});
    return _elm.CardList.Update.values = {_op: _op,update: update};
@@ -11820,10 +11837,12 @@ Elm.Deck.Action.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var CardRemoved = function (a) {    return {ctor: "CardRemoved",_0: a};};
+   var CardAdded = function (a) {    return {ctor: "CardAdded",_0: a};};
    var RemoveCard = function (a) {    return {ctor: "RemoveCard",_0: a};};
    var AddCard = function (a) {    return {ctor: "AddCard",_0: a};};
    var NoOp = {ctor: "NoOp"};
-   return _elm.Deck.Action.values = {_op: _op,NoOp: NoOp,AddCard: AddCard,RemoveCard: RemoveCard};
+   return _elm.Deck.Action.values = {_op: _op,NoOp: NoOp,AddCard: AddCard,RemoveCard: RemoveCard,CardAdded: CardAdded,CardRemoved: CardRemoved};
 };
 Elm.Deck = Elm.Deck || {};
 Elm.Deck.Update = Elm.Deck.Update || {};
@@ -11839,6 +11858,7 @@ Elm.Deck.Update.make = function (_elm) {
    $Deck$Action = Elm.Deck.Action.make(_elm),
    $Deck$Model = Elm.Deck.Model.make(_elm),
    $Effects = Elm.Effects.make(_elm),
+   $Library$Util = Elm.Library.Util.make(_elm),
    $List = Elm.List.make(_elm),
    $List$Extra = Elm.List.Extra.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
@@ -11854,14 +11874,21 @@ Elm.Deck.Update.make = function (_elm) {
             return list;
          }
    });
-   var update = F2(function (action,model) {
+   var update = F3(function (services,action,model) {
       var _p2 = action;
       switch (_p2.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         case "AddCard": return {ctor: "_Tuple2",_0: A2($Basics._op["++"],model,_U.list([_p2._0])),_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: A2(removeFromList,A2($List$Extra.elemIndex,_p2._0,model),model),_1: $Effects.none};}
+         case "AddCard": var _p3 = _p2._0;
+           return {ctor: "_Tuple2",_0: A2($Basics._op["++"],model,_U.list([_p3])),_1: $Library$Util.actionEffect($Deck$Action.CardAdded(_p3))};
+         case "RemoveCard": var _p4 = _p2._0;
+           return {ctor: "_Tuple2"
+                  ,_0: A2(removeFromList,A2($List$Extra.elemIndex,_p4,model),model)
+                  ,_1: $Library$Util.actionEffect($Deck$Action.CardRemoved(_p4))};
+         case "CardAdded": return {ctor: "_Tuple2",_0: model,_1: A2(services.signalCardAdded,_p2._0,$Deck$Action.NoOp)};
+         default: return {ctor: "_Tuple2",_0: model,_1: A2(services.signalCardRemoved,_p2._0,$Deck$Action.NoOp)};}
    });
    var initialModelAndEffects = {ctor: "_Tuple2",_0: $Deck$Model.initialModel,_1: $Effects.none};
+   var Services = F2(function (a,b) {    return {signalCardAdded: a,signalCardRemoved: b};});
    return _elm.Deck.Update.values = {_op: _op,initialModelAndEffects: initialModelAndEffects,update: update};
 };
 Elm.Deck = Elm.Deck || {};
@@ -11909,11 +11936,13 @@ Elm.Deck.Feature.make = function (_elm) {
    if (_elm.Deck.Feature.values) return _elm.Deck.Feature.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Common$Model = Elm.Common.Model.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Deck$Action = Elm.Deck.Action.make(_elm),
    $Deck$Model = Elm.Deck.Model.make(_elm),
    $Deck$Update = Elm.Deck.Update.make(_elm),
    $Deck$View = Elm.Deck.View.make(_elm),
+   $Library$Util = Elm.Library.Util.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -11921,7 +11950,11 @@ Elm.Deck.Feature.make = function (_elm) {
    $StartApp = Elm.StartApp.make(_elm);
    var _op = {};
    var createDeckFeature = function (config) {
-      return $StartApp.start({init: $Deck$Update.initialModelAndEffects,update: $Deck$Update.update,view: $Deck$View.view,inputs: config.inputs});
+      return $StartApp.start({init: $Deck$Update.initialModelAndEffects
+                             ,update: $Deck$Update.update({signalCardAdded: $Library$Util.broadcast(config.outputs.onCardAdded)
+                                                          ,signalCardRemoved: $Library$Util.broadcast(config.outputs.onCardRemoved)})
+                             ,view: $Deck$View.view
+                             ,inputs: config.inputs});
    };
    var Config = F2(function (a,b) {    return {inputs: a,outputs: b};});
    return _elm.Deck.Feature.values = {_op: _op,createDeckFeature: createDeckFeature};
@@ -11965,15 +11998,19 @@ Elm.DeckBuilderMain.make = function (_elm) {
       return A2($Html.div,_U.list([]),_U.list([banner,A2($Html.div,_U.list([]),_U.list([cardListView,deckView]))]));
    });
    var deckMailbox = $Signal.mailbox($Deck$Action.AddCard($Common$Model.testCard));
-   var deckFeature = $Deck$Feature.createDeckFeature({inputs: _U.list([deckMailbox.signal]),outputs: {}});
    var cardListMailbox = $Signal.mailbox($CardList$Action.ShowList($CardList$Model.initialModel));
    var cardListFeature = $CardList$Feature.createCardListFeature({inputs: _U.list([cardListMailbox.signal])
                                                                  ,outputs: {onCardClicked: _U.list([A2($Signal.forwardTo,
                                                                            deckMailbox.address,
                                                                            $Deck$Action.AddCard)])
                                                                            ,onUpdatedList: _U.list([])}});
+   var deckFeature = $Deck$Feature.createDeckFeature({inputs: _U.list([deckMailbox.signal])
+                                                     ,outputs: {onCardAdded: _U.list([A2($Signal.forwardTo,cardListMailbox.address,$CardList$Action.CardAdded)])
+                                                               ,onCardRemoved: _U.list([A2($Signal.forwardTo,
+                                                               cardListMailbox.address,
+                                                               $CardList$Action.CardRemoved)])}});
    var html = A3($Signal.map2,deckBuilderMainView,cardListFeature.html,deckFeature.html);
-   var tasks = $Signal.mergeMany(_U.list([cardListFeature.tasks]));
+   var tasks = $Signal.mergeMany(_U.list([cardListFeature.tasks,deckFeature.tasks]));
    var deckBuilderMainFeature = {html: html,tasks: tasks};
    return _elm.DeckBuilderMain.values = {_op: _op,deckBuilderMainFeature: deckBuilderMainFeature};
 };

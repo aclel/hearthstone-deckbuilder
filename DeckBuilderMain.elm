@@ -5,7 +5,7 @@ import Effects exposing (Never)
 import Html exposing (..)
 import Html.Attributes exposing (style, src)
 import Task exposing (Task)
-import CardList.Action exposing (Action(ShowList))
+import CardList.Action exposing (Action(ShowList, CardAdded, CardRemoved))
 import CardList.Feature exposing (CardListFeature, createCardListFeature)
 import CardList.Model exposing (initialModel)
 import Deck.Action exposing (Action(AddCard))
@@ -35,7 +35,8 @@ deckFeature =
     createDeckFeature
         { inputs = [ deckMailbox.signal ]
         , outputs =
-            { }
+            { onCardAdded = [ Signal.forwardTo cardListMailbox.address CardAdded ]
+            , onCardRemoved = [ Signal.forwardTo cardListMailbox.address CardRemoved ]}
         }
 
 -- Allow the use of => operator when defining styles
@@ -93,6 +94,7 @@ tasks : Signal (Task Never ())
 tasks =
     Signal.mergeMany
         [ cardListFeature.tasks
+        , deckFeature.tasks
         ]
 
 deckBuilderMainFeature = 

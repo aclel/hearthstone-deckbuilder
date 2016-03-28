@@ -8,3 +8,5 @@ type Action
  | LoadList
  | ShowList Model
  | CardClicked Card
+ | CardAdded Card -- Triggered from outside CardList
+ | CardRemoved Card -- Triggered from outside CardList
