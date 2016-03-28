@@ -14,7 +14,7 @@ cardDecoder =
         (Json.oneOf[ "cardId" := Json.string, Json.succeed "No card Id"])
         (Json.oneOf[ "name" := Json.string, Json.succeed "No name" ])
         (Json.oneOf[ "cost" := Json.int, Json.succeed 0])
-        (Json.oneOf[ "img" := Json.string, Json.succeed "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" ])
+        (Json.oneOf[ "img" := Json.string, Json.succeed "assets/not_available.png" ])
 
 
 decodeCardList : Json.Decoder (List Card)
@@ -34,7 +34,7 @@ loadCardsHttp =
     Http.send Http.defaultSettings
       { verb = "GET"
       , headers = [("X-Mashape-Key", "Ufg6vwlHZ8mshvYg5E9y8Qcz4WAXp1RDcdijsnn2gcCmIav3tI")]
-      , url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/sets/Classic"
+      , url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/races/Mech"
       , body = Http.empty
       }
       |> Http.fromJson decodeCardList

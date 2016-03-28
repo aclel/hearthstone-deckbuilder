@@ -11095,8 +11095,7 @@ Elm.CardList.Service.make = function (_elm) {
    $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"cardId",$Json$Decode.string),$Json$Decode.succeed("No card Id")])),
    $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"name",$Json$Decode.string),$Json$Decode.succeed("No name")])),
    $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"cost",$Json$Decode.$int),$Json$Decode.succeed(0)])),
-   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"img",$Json$Decode.string)
-                              ,$Json$Decode.succeed("https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg")])));
+   $Json$Decode.oneOf(_U.list([A2($Json$Decode._op[":="],"img",$Json$Decode.string),$Json$Decode.succeed("assets/not_available.png")])));
    var decodeCardList = $Json$Decode.list(cardDecoder);
    var loadCardsHttp = A2($Task.map,
    intoModel,
@@ -11106,7 +11105,7 @@ Elm.CardList.Service.make = function (_elm) {
    $Http.defaultSettings,
    {verb: "GET"
    ,headers: _U.list([{ctor: "_Tuple2",_0: "X-Mashape-Key",_1: "Ufg6vwlHZ8mshvYg5E9y8Qcz4WAXp1RDcdijsnn2gcCmIav3tI"}])
-   ,url: "https://omgvamp-hearthstone-v1.p.mashape.com/cards/sets/Classic"
+   ,url: "https://omgvamp-hearthstone-v1.p.mashape.com/cards/races/Mech"
    ,body: $Http.empty})));
    var loadCards = A2($Task.onError,loadCardsHttp,errorMessage);
    return _elm.CardList.Service.values = {_op: _op,loadCards: loadCards};
@@ -11171,7 +11170,7 @@ Elm.CardList.View.make = function (_elm) {
    var imgStyle = function (url) {
       return $Html$Attributes.style(_U.list([A2(_op["=>"],"display","inline-block")
                                             ,A2(_op["=>"],"width","300px")
-                                            ,A2(_op["=>"],"height","300px")
+                                            ,A2(_op["=>"],"height","400px")
                                             ,A2(_op["=>"],"background-position","center center")
                                             ,A2(_op["=>"],"background-size","cover")
                                             ,A2(_op["=>"],"background-image",A2($Basics._op["++"],"url(\'",A2($Basics._op["++"],url,"\')")))]));
@@ -11179,20 +11178,17 @@ Elm.CardList.View.make = function (_elm) {
    var renderCard = F2(function (address,card) {
       return A2($Html.div,
       _U.list([A2($Html$Events.onClick,address,$CardList$Action.CardClicked(card))]),
-      _U.list([A2($Html.h2,_U.list([headerStyle]),_U.list([$Html.text(card.name)])),A2($Html.div,_U.list([imgStyle(card.img)]),_U.list([]))]));
+      _U.list([A2($Html.div,_U.list([imgStyle(card.img)]),_U.list([]))]));
    });
-   var cardList = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","70%")
-                                                 ,A2(_op["=>"],"float","left")
-                                                 ,A2(_op["=>"],"height","768px")
-                                                 ,A2(_op["=>"],"overflow-y","auto")
-                                                 ,A2(_op["=>"],"border-right","2px solid black")]));
-   var view = F2(function (address,model) {
-      return A2($Html.div,
-      _U.list([cardList]),
-      _U.list([A2($Html.div,
-      _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"display","flex"),A2(_op["=>"],"flex-wrap","wrap")]))]),
-      A2($List.map,renderCard(address),model.cards))]));
-   });
+   var cardListStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","70%")
+                                                      ,A2(_op["=>"],"float","left")
+                                                      ,A2(_op["=>"],"height","768px")
+                                                      ,A2(_op["=>"],"overflow-y","auto")
+                                                      ,A2(_op["=>"],"border-right","2px solid black")
+                                                      ,A2(_op["=>"],"display","flex")
+                                                      ,A2(_op["=>"],"flex-wrap","wrap")
+                                                      ,A2(_op["=>"],"justify-content","space-around")]));
+   var view = F2(function (address,model) {    return A2($Html.div,_U.list([cardListStyle]),A2($List.map,renderCard(address),model.cards));});
    return _elm.CardList.View.values = {_op: _op,view: view};
 };
 Elm.CardList = Elm.CardList || {};

@@ -13,8 +13,7 @@ import CardList.Action exposing (Action(LoadList, CardClicked))
 renderCard : Signal.Address Action -> Card -> Html
 renderCard address card = 
     div [ onClick address (CardClicked card)] 
-    [ h2 [headerStyle] [text card.name]
-    , div [imgStyle card.img] []
+    [ div [imgStyle card.img] []
     ]
 
 headerStyle : Attribute
@@ -30,7 +29,7 @@ imgStyle url =
   style
     [ "display" => "inline-block"
     , "width" => "300px"
-    , "height" => "300px"
+    , "height" => "400px"
     , "background-position" => "center center"
     , "background-size" => "cover"
     , "background-image" => ("url('" ++ url ++ "')")
@@ -39,18 +38,19 @@ imgStyle url =
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-    div [ cardList ]
-        [ div [ style [ "display" => "flex", "flex-wrap" => "wrap" ] ]
-            (List.map (renderCard address) model.cards)
-        ]
+    div [ cardListStyle ]
+        (List.map (renderCard address) model.cards)
 
 
-cardList : Attribute
-cardList =
+cardListStyle : Attribute
+cardListStyle =
     style
       [ "width" => "70%"
       , "float" => "left"
       , "height" => "768px"
       , "overflow-y" => "auto"
       , "border-right" => "2px solid black"
+      , "display" => "flex"
+      , "flex-wrap" => "wrap"
+      , "justify-content" => "space-around"
       ]
