@@ -11188,7 +11188,12 @@ Elm.CardList.View.make = function (_elm) {
                                                       ,A2(_op["=>"],"display","flex")
                                                       ,A2(_op["=>"],"flex-wrap","wrap")
                                                       ,A2(_op["=>"],"justify-content","space-around")]));
-   var view = F2(function (address,model) {    return A2($Html.div,_U.list([cardListStyle]),A2($List.map,renderCard(address),model.cards));});
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text(model.message)]))
+              ,A2($Html.div,_U.list([cardListStyle]),A2($List.map,renderCard(address),model.cards))]));
+   });
    return _elm.CardList.View.values = {_op: _op,view: view};
 };
 Elm.CardList = Elm.CardList || {};
