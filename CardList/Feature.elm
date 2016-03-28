@@ -3,10 +3,12 @@ module CardList.Feature (CardListFeature, createCardListFeature) where
 import Common.Model exposing (Card)
 import StartApp exposing (App, start)
 import Library.Util exposing (broadcast)
-import CardList.Action exposing (Action)
-import CardList.Model exposing (Model)
+import Effects exposing (Effects, Never)
+import Task exposing (Task)
+import CardList.Action exposing (Action(..))
+import CardList.Model exposing (Model, initialModel)
 import CardList.Service exposing (loadCards)
-import CardList.Update exposing (initialModelAndEffects, update)
+import CardList.Update exposing (update)
 import CardList.View exposing (view)
 
 type alias Config =
@@ -19,6 +21,13 @@ type alias Config =
 
 type alias CardListFeature =
     App Model
+
+
+-- Loads the cards when the app is initialised
+initialModelAndEffects : ( Model, Effects Action )
+initialModelAndEffects = 
+    ( initialModel, Effects.task (loadCards |> Task.map ShowList) )
+
 
 createCardListFeature : Config -> CardListFeature
 createCardListFeature config =
@@ -33,3 +42,4 @@ createCardListFeature config =
         , view = view
         , inputs = config.inputs
         }
+

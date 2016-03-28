@@ -11142,9 +11142,8 @@ Elm.CardList.Update.make = function (_elm) {
            return {ctor: "_Tuple2",_0: _p1,_1: A2(services.signalUpdatedList,_p1.cards,$CardList$Action.NoOp)};
          default: return {ctor: "_Tuple2",_0: model,_1: A2(services.signalCardClicked,_p0._0,$CardList$Action.NoOp)};}
    });
-   var initialModelAndEffects = {ctor: "_Tuple2",_0: $CardList$Model.initialModel,_1: $Effects.none};
    var Services = F3(function (a,b,c) {    return {loadCards: a,signalUpdatedList: b,signalCardClicked: c};});
-   return _elm.CardList.Update.values = {_op: _op,initialModelAndEffects: initialModelAndEffects,update: update};
+   return _elm.CardList.Update.values = {_op: _op,update: update};
 };
 Elm.CardList = Elm.CardList || {};
 Elm.CardList.View = Elm.CardList.View || {};
@@ -11189,10 +11188,9 @@ Elm.CardList.View.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([cardList]),
-      _U.list([A2($Html.button,_U.list([A2($Html$Events.onClick,address,$CardList$Action.LoadList)]),_U.list([$Html.text("Load Cards")]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"display","flex"),A2(_op["=>"],"flex-wrap","wrap")]))]),
-              A2($List.map,renderCard(address),model.cards))]));
+      _U.list([A2($Html.div,
+      _U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"display","flex"),A2(_op["=>"],"flex-wrap","wrap")]))]),
+      A2($List.map,renderCard(address),model.cards))]));
    });
    return _elm.CardList.View.values = {_op: _op,view: view};
 };
@@ -11212,15 +11210,20 @@ Elm.CardList.Feature.make = function (_elm) {
    $CardList$View = Elm.CardList.View.make(_elm),
    $Common$Model = Elm.Common.Model.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
    $Library$Util = Elm.Library.Util.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $StartApp = Elm.StartApp.make(_elm);
+   $StartApp = Elm.StartApp.make(_elm),
+   $Task = Elm.Task.make(_elm);
    var _op = {};
+   var initialModelAndEffects = {ctor: "_Tuple2"
+                                ,_0: $CardList$Model.initialModel
+                                ,_1: $Effects.task(A2($Task.map,$CardList$Action.ShowList,$CardList$Service.loadCards))};
    var createCardListFeature = function (config) {
-      return $StartApp.start({init: $CardList$Update.initialModelAndEffects
+      return $StartApp.start({init: initialModelAndEffects
                              ,update: $CardList$Update.update({loadCards: $CardList$Service.loadCards
                                                               ,signalUpdatedList: $Library$Util.broadcast(config.outputs.onUpdatedList)
                                                               ,signalCardClicked: $Library$Util.broadcast(config.outputs.onCardClicked)})

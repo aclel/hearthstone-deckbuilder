@@ -1,4 +1,4 @@
-module CardList.Update (initialModelAndEffects, update) where
+module CardList.Update (update) where
 
 import Common.Model exposing (Card)
 import Effects exposing (Effects, Never)
@@ -12,12 +12,6 @@ type alias Services =
     , signalUpdatedList : List Card -> Action -> Effects Action
     , signalCardClicked : Card -> Action -> Effects Action
     }
-
-
-initialModelAndEffects : ( Model, Effects Action )
-initialModelAndEffects = 
-    ( initialModel, Effects.none )
-
 
 update : Services -> Action -> Model -> (Model, Effects Action)
 update services action model =

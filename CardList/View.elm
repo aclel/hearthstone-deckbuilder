@@ -40,12 +40,7 @@ imgStyle url =
 view : Signal.Address Action -> Model -> Html
 view address model =
     div [ cardList ]
-        [ button 
-            [ onClick address LoadList
-            ] 
-            [ text "Load Cards" ]
-        ,
-        div [ style [ "display" => "flex", "flex-wrap" => "wrap" ] ]
+        [ div [ style [ "display" => "flex", "flex-wrap" => "wrap" ] ]
             (List.map (renderCard address) model.cards)
         ]
 
