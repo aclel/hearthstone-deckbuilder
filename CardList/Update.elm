@@ -33,11 +33,43 @@ update services action model =
             ( model, services.signalCardClicked card NoOp )
 
         CardAdded card ->
-            -- Need to update numCopies on card in model
-            ( model, Effects.none )
+            let 
+                updatedCards = incrementCopies model.cards card
+            in
+                ( { model | cards = updatedCards, message = "" } , Effects.none)
 
         CardRemoved card ->
-            -- Need to update numCopies on card in model
-            ( model, Effects.none)
+            let 
+                updatedCards = decrementCopies model.cards card
+            in
+                ( { model | cards = updatedCards, message = "" } , Effects.none)
+
+
+
+-- Increment the number of copies of the given card, up to the maxCopies
+incrementCopies : List Card -> Card -> List Card
+incrementCopies cards card =
+    let
+        updateNumCopies c =
+            if c.cardId == card.cardId  && card.numCopies < card.maxCopies then
+                { c | numCopies = c.numCopies + 1 }
+            else
+                c
+    in
+        List.map updateNumCopies cards
+
+-- Decrement the number of copies of the given card, ensuring it remains >= 0
+decrementCopies : List Card -> Card -> List Card
+decrementCopies cards card =
+    let
+        updateNumCopies c =
+            if c.cardId == card.cardId && c.numCopies > 0 then
+                { c | numCopies = c.numCopies - 1 }
+            else
+                c
+    in
+        List.map updateNumCopies cards
+
+
 
 

@@ -20,6 +20,7 @@ cardStyle : Attribute
 cardStyle = 
     style
         [ "list-style-type" => "none"
+        , "cursor" => "pointer"
         ]
 
 view : Signal.Address Action -> Model -> Html

@@ -11695,6 +11695,16 @@ Elm.CardList.Update.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
+   var decrementCopies = F2(function (cards,card) {
+      var updateNumCopies = function (c) {    return _U.eq(c.cardId,card.cardId) && _U.cmp(c.numCopies,0) > 0 ? _U.update(c,{numCopies: c.numCopies - 1}) : c;};
+      return A2($List.map,updateNumCopies,cards);
+   });
+   var incrementCopies = F2(function (cards,card) {
+      var updateNumCopies = function (c) {
+         return _U.eq(c.cardId,card.cardId) && _U.cmp(card.numCopies,card.maxCopies) < 0 ? _U.update(c,{numCopies: c.numCopies + 1}) : c;
+      };
+      return A2($List.map,updateNumCopies,cards);
+   });
    var update = F3(function (services,action,model) {
       var _p0 = action;
       switch (_p0.ctor)
@@ -11705,8 +11715,10 @@ Elm.CardList.Update.make = function (_elm) {
          case "ShowList": var _p1 = _p0._0;
            return {ctor: "_Tuple2",_0: _p1,_1: A2(services.signalUpdatedList,_p1.cards,$CardList$Action.NoOp)};
          case "CardClicked": return {ctor: "_Tuple2",_0: model,_1: A2(services.signalCardClicked,_p0._0,$CardList$Action.NoOp)};
-         case "CardAdded": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
+         case "CardAdded": var updatedCards = A2(incrementCopies,model.cards,_p0._0);
+           return {ctor: "_Tuple2",_0: _U.update(model,{cards: updatedCards,message: ""}),_1: $Effects.none};
+         default: var updatedCards = A2(decrementCopies,model.cards,_p0._0);
+           return {ctor: "_Tuple2",_0: _U.update(model,{cards: updatedCards,message: ""}),_1: $Effects.none};}
    });
    var Services = F3(function (a,b,c) {    return {loadCards: a,signalUpdatedList: b,signalCardClicked: c};});
    return _elm.CardList.Update.values = {_op: _op,update: update};
@@ -11740,12 +11752,16 @@ Elm.CardList.View.make = function (_elm) {
                                             ,A2(_op["=>"],"height","400px")
                                             ,A2(_op["=>"],"background-position","center center")
                                             ,A2(_op["=>"],"background-size","cover")
-                                            ,A2(_op["=>"],"background-image",A2($Basics._op["++"],"url(\'",A2($Basics._op["++"],url,"\')")))]));
+                                            ,A2(_op["=>"],"background-image",A2($Basics._op["++"],"url(\'",A2($Basics._op["++"],url,"\')")))
+                                            ,A2(_op["=>"],"cursor","pointer")]));
    };
    var renderCard = F2(function (address,card) {
       return A2($Html.div,
       _U.list([A2($Html$Events.onClick,address,$CardList$Action.CardClicked(card))]),
-      _U.list([A2($Html.div,_U.list([imgStyle(card.img)]),_U.list([]))]));
+      _U.list([A2($Html.div,_U.list([imgStyle(card.img)]),_U.list([]))
+              ,A2($Html.div,
+              _U.list([]),
+              _U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(card.numCopies),A2($Basics._op["++"],"/",$Basics.toString(card.maxCopies))))]))]));
    });
    var cardListStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","70%")
                                                       ,A2(_op["=>"],"float","left")
@@ -11913,7 +11929,7 @@ Elm.Deck.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var cardStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"list-style-type","none")]));
+   var cardStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"list-style-type","none"),A2(_op["=>"],"cursor","pointer")]));
    var renderCard = F2(function (address,card) {
       return A2($Html.li,
       _U.list([cardStyle,A2($Html$Events.onClick,address,$Deck$Action.RemoveCard(card))]),

@@ -14,6 +14,9 @@ renderCard : Signal.Address Action -> Card -> Html
 renderCard address card = 
     div [ onClick address (CardClicked card)] 
     [ div [imgStyle card.img] []
+    , div [] 
+        [text (toString card.numCopies ++ "/" ++ toString card.maxCopies)
+        ]
     ]
 
 headerStyle : Attribute
@@ -33,6 +36,7 @@ imgStyle url =
     , "background-position" => "center center"
     , "background-size" => "cover"
     , "background-image" => ("url('" ++ url ++ "')")
+    , "cursor" => "pointer"
     ]
 
 
