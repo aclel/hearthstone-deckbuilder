@@ -21,6 +21,8 @@ cardStyle =
     style
         [ "list-style-type" => "none"
         , "cursor" => "pointer"
+        , "border" => "1px solid black"
+        , "margin-bottom" => "2px"
         ]
 
 view : Signal.Address Action -> Model -> Html
@@ -28,7 +30,7 @@ view address model =
     div [ deckList ]
         [
             h2 [] [text "Deck List"],
-            ul []
+            ul [ style [ "padding-left" => "0"]]
                 (List.map (renderCard address) model)
         ]
 

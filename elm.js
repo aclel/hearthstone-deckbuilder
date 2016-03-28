@@ -11763,6 +11763,7 @@ Elm.CardList.View.make = function (_elm) {
               _U.list([]),
               _U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(card.numCopies),A2($Basics._op["++"],"/",$Basics.toString(card.maxCopies))))]))]));
    });
+   var messageStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"font-size","25px"),A2(_op["=>"],"font-weight","600"),A2(_op["=>"],"padding-left","10px")]));
    var cardListStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","70%")
                                                       ,A2(_op["=>"],"float","left")
                                                       ,A2(_op["=>"],"height","768px")
@@ -11774,7 +11775,7 @@ Elm.CardList.View.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([]),
-      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text(model.message)]))
+      _U.list([A2($Html.div,_U.list([messageStyle]),_U.list([$Html.text(model.message)]))
               ,A2($Html.div,_U.list([cardListStyle]),A2($List.map,renderCard(address),model.cards))]));
    });
    return _elm.CardList.View.values = {_op: _op,view: view};
@@ -11895,7 +11896,7 @@ Elm.Deck.Update.make = function (_elm) {
       switch (_p2.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "AddCard": var _p3 = _p2._0;
-           var updateCards = function (card) {    return _U.cmp(card.numCopies,2) < 0 ? A2($Basics._op["++"],model,_U.list([card])) : model;};
+           var updateCards = function (card) {    return _U.cmp(card.numCopies,card.maxCopies) < 0 ? A2($Basics._op["++"],model,_U.list([card])) : model;};
            return {ctor: "_Tuple2",_0: updateCards(_p3),_1: $Library$Util.actionEffect($Deck$Action.CardAdded(_p3))};
          case "RemoveCard": var _p4 = _p2._0;
            return {ctor: "_Tuple2"
@@ -11930,7 +11931,10 @@ Elm.Deck.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var cardStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"list-style-type","none"),A2(_op["=>"],"cursor","pointer")]));
+   var cardStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"list-style-type","none")
+                                                  ,A2(_op["=>"],"cursor","pointer")
+                                                  ,A2(_op["=>"],"border","1px solid black")
+                                                  ,A2(_op["=>"],"margin-bottom","2px")]));
    var renderCard = F2(function (address,card) {
       return A2($Html.li,
       _U.list([cardStyle,A2($Html$Events.onClick,address,$Deck$Action.RemoveCard(card))]),
@@ -11940,7 +11944,8 @@ Elm.Deck.View.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([deckList]),
-      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Deck List")])),A2($Html.ul,_U.list([]),A2($List.map,renderCard(address),model))]));
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Deck List")]))
+              ,A2($Html.ul,_U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"padding-left","0")]))]),A2($List.map,renderCard(address),model))]));
    });
    return _elm.Deck.View.values = {_op: _op,view: view};
 };

@@ -43,12 +43,17 @@ imgStyle url =
 view : Signal.Address Action -> Model -> Html
 view address model =
     div []
-        [ h2 [] [ text model.message ]
+        [ div [ messageStyle ] [ text model.message ]
         , div [ cardListStyle ]
             (List.map (renderCard address) model.cards)
         ]
-    
-        
+
+messageStyle : Attribute 
+messageStyle =
+    style 
+    [ "font-size" => "25px"
+    , "font-weight" => "600"
+    , "padding-left" => "10px" ]        
 
 
 cardListStyle : Attribute

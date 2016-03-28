@@ -30,7 +30,7 @@ update services action model =
         AddCard card ->
             let
                 updateCards card =
-                    if card.numCopies < 2 then
+                    if card.numCopies < card.maxCopies then
                         model ++ [ card ]
                     else 
                         model
