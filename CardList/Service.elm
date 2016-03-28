@@ -10,9 +10,10 @@ import CardList.Model exposing (Model)
 
 cardDecoder : Json.Decoder Card
 cardDecoder =
-    Json.object3 Card
+    Json.object4 Card
         (Json.oneOf[ "cardId" := Json.string, Json.succeed "No card Id"])
         (Json.oneOf[ "name" := Json.string, Json.succeed "No name" ])
+        (Json.oneOf[ "cost" := Json.int, Json.succeed 0])
         (Json.oneOf[ "img" := Json.string, Json.succeed "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg" ])
 
 
@@ -33,7 +34,7 @@ loadCardsHttp =
     Http.send Http.defaultSettings
       { verb = "GET"
       , headers = [("X-Mashape-Key", "Ufg6vwlHZ8mshvYg5E9y8Qcz4WAXp1RDcdijsnn2gcCmIav3tI")]
-      , url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/sets/Basic"
+      , url = "https://omgvamp-hearthstone-v1.p.mashape.com/cards/sets/Classic"
       , body = Http.empty
       }
       |> Http.fromJson decodeCardList

@@ -7,3 +7,4 @@ type Action
  = NoOp
  | LoadList
  | ShowList Model
+ | CardClicked Card

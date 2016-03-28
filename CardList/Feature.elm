@@ -13,6 +13,7 @@ type alias Config =
     { inputs : List (Signal Action)
     , outputs :
         { onUpdatedList : List (Signal.Address (List Card))
+        , onCardClicked : List (Signal.Address Card)
         }
     }
 
@@ -27,6 +28,7 @@ createCardListFeature config =
             update
                 { loadCards = loadCards
                 , signalUpdatedList = broadcast config.outputs.onUpdatedList
+                , signalCardClicked = broadcast config.outputs.onCardClicked
                 }
         , view = view
         , inputs = config.inputs
