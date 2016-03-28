@@ -28,7 +28,14 @@ update services action model =
             ( model, Effects.none )
 
         AddCard card ->
-            ( model ++ [ card ], actionEffect (CardAdded card) )
+            let
+                updateCards card =
+                    if card.numCopies < 2 then
+                        model ++ [ card ]
+                    else 
+                        model
+            in
+                ( updateCards card, actionEffect (CardAdded card) )
 
         RemoveCard card ->
             ( removeFromList (elemIndex card model) model, actionEffect (CardRemoved card) )

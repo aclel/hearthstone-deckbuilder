@@ -11895,7 +11895,8 @@ Elm.Deck.Update.make = function (_elm) {
       switch (_p2.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "AddCard": var _p3 = _p2._0;
-           return {ctor: "_Tuple2",_0: A2($Basics._op["++"],model,_U.list([_p3])),_1: $Library$Util.actionEffect($Deck$Action.CardAdded(_p3))};
+           var updateCards = function (card) {    return _U.cmp(card.numCopies,2) < 0 ? A2($Basics._op["++"],model,_U.list([card])) : model;};
+           return {ctor: "_Tuple2",_0: updateCards(_p3),_1: $Library$Util.actionEffect($Deck$Action.CardAdded(_p3))};
          case "RemoveCard": var _p4 = _p2._0;
            return {ctor: "_Tuple2"
                   ,_0: A2(removeFromList,A2($List$Extra.elemIndex,_p4,model),model)
