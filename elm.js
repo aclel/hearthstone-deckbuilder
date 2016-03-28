@@ -11896,7 +11896,14 @@ Elm.Deck.Update.make = function (_elm) {
       switch (_p2.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "AddCard": var _p3 = _p2._0;
-           var updateCards = function (card) {    return _U.cmp(card.numCopies,card.maxCopies) < 0 ? A2($Basics._op["++"],model,_U.list([card])) : model;};
+           var maxCards = 30;
+           var updateCards = function (card) {
+              return _U.cmp(card.numCopies,card.maxCopies) < 0 && _U.cmp($List.length(model),maxCards) < 0 ? A2($List.sortBy,
+              function (_) {
+                 return _.cost;
+              },
+              A2($Basics._op["++"],model,_U.list([card]))) : model;
+           };
            return {ctor: "_Tuple2",_0: updateCards(_p3),_1: $Library$Util.actionEffect($Deck$Action.CardAdded(_p3))};
          case "RemoveCard": var _p4 = _p2._0;
            return {ctor: "_Tuple2"
@@ -11944,7 +11951,11 @@ Elm.Deck.View.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([deckList]),
-      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Deck List")]))
+      _U.list([A2($Html.h2,
+              _U.list([]),
+              _U.list([$Html.text(A2($Basics._op["++"],
+              "Deck List",
+              A2($Basics._op["++"]," (",A2($Basics._op["++"],$Basics.toString($List.length(model)),"/30)"))))]))
               ,A2($Html.ul,_U.list([$Html$Attributes.style(_U.list([A2(_op["=>"],"padding-left","0")]))]),A2($List.map,renderCard(address),model))]));
    });
    return _elm.Deck.View.values = {_op: _op,view: view};

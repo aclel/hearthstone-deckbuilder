@@ -29,7 +29,7 @@ view : Signal.Address Action -> Model -> Html
 view address model =
     div [ deckList ]
         [
-            h2 [] [text "Deck List"],
+            h2 [] [text ("Deck List" ++ " (" ++ (toString (List.length model)) ++ "/30)")],
             ul [ style [ "padding-left" => "0"]]
                 (List.map (renderCard address) model)
         ]

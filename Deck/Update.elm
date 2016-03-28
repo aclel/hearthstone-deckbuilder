@@ -29,9 +29,11 @@ update services action model =
 
         AddCard card ->
             let
+                maxCards = 30
+
                 updateCards card =
-                    if card.numCopies < card.maxCopies then
-                        model ++ [ card ]
+                    if card.numCopies < card.maxCopies  && List.length model < maxCards then
+                        List.sortBy .cost (model ++ [ card ])
                     else 
                         model
             in
