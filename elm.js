@@ -11180,9 +11180,7 @@ Elm.CardList.View.make = function (_elm) {
    var renderCard = F2(function (address,card) {
       return A2($Html.div,
       _U.list([A2($Html$Events.onClick,address,$CardList$Action.CardClicked(card))]),
-      _U.list([A2($Html.h2,_U.list([headerStyle]),_U.list([$Html.text(card.name)]))
-              ,A2($Html.h2,_U.list([headerStyle]),_U.list([$Html.text($Basics.toString(card.cost))]))
-              ,A2($Html.div,_U.list([imgStyle(card.img)]),_U.list([]))]));
+      _U.list([A2($Html.h2,_U.list([headerStyle]),_U.list([$Html.text(card.name)])),A2($Html.div,_U.list([imgStyle(card.img)]),_U.list([]))]));
    });
    var cardList = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","70%")
                                                  ,A2(_op["=>"],"float","left")
@@ -11320,7 +11318,11 @@ Elm.Deck.View.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var renderCard = F2(function (address,card) {    return A2($Html.li,_U.list([]),_U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text(card.name)]))]));});
+   var renderCard = F2(function (address,card) {
+      return A2($Html.li,
+      _U.list([]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(card.cost),A2($Basics._op["++"]," ",card.name)))]))]));
+   });
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var deckList = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","30%"),A2(_op["=>"],"float","right")]));
    var view = F2(function (address,model) {

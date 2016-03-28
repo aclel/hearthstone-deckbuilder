@@ -14,7 +14,6 @@ renderCard : Signal.Address Action -> Card -> Html
 renderCard address card = 
     div [ onClick address (CardClicked card)] 
     [ h2 [headerStyle] [text card.name]
-    , h2 [headerStyle] [text (toString card.cost)]
     , div [imgStyle card.img] []
     ]
 

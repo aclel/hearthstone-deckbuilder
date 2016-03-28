@@ -14,7 +14,7 @@ import Deck.Action exposing (Action(..))
 renderCard : Signal.Address Action -> Card -> Html
 renderCard address card =
     li  []
-        [ h2 [] [text card.name] ]
+        [ h2 [] [text ((toString card.cost) ++ " " ++ card.name)] ]
 
 
 
