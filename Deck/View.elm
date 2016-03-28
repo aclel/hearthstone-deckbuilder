@@ -13,10 +13,14 @@ import Deck.Action exposing (Action(..))
 
 renderCard : Signal.Address Action -> Card -> Html
 renderCard address card =
-    li  []
+    li  [ cardStyle]
         [ h2 [] [text ((toString card.cost) ++ " " ++ card.name)] ]
 
-
+cardStyle : Attribute
+cardStyle = 
+    style
+        [ "list-style-type" => "none"
+        ]
 
 view : Signal.Address Action -> Model -> Html
 view address model =
@@ -30,6 +34,6 @@ view address model =
 deckList : Attribute
 deckList =
     style
-    [ "width" => "30%"
+    [ "width" => "29%"
     , "float" => "right"
     ]

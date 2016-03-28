@@ -11184,7 +11184,8 @@ Elm.CardList.View.make = function (_elm) {
    var cardList = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","70%")
                                                  ,A2(_op["=>"],"float","left")
                                                  ,A2(_op["=>"],"height","768px")
-                                                 ,A2(_op["=>"],"overflow-y","auto")]));
+                                                 ,A2(_op["=>"],"overflow-y","auto")
+                                                 ,A2(_op["=>"],"border-right","2px solid black")]));
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([cardList]),
@@ -11321,13 +11322,14 @@ Elm.Deck.View.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
+   var cardStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"list-style-type","none")]));
    var renderCard = F2(function (address,card) {
       return A2($Html.li,
-      _U.list([]),
+      _U.list([cardStyle]),
       _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],$Basics.toString(card.cost),A2($Basics._op["++"]," ",card.name)))]))]));
    });
-   _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var deckList = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","30%"),A2(_op["=>"],"float","right")]));
+   var deckList = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","29%"),A2(_op["=>"],"float","right")]));
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([deckList]),

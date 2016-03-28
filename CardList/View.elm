@@ -48,8 +48,9 @@ view address model =
 cardList : Attribute
 cardList =
     style
-      ["width" => "70%"
-      ,"float" => "left"
-      ,"height" => "768px"
-      ,"overflow-y" => "auto"
+      [ "width" => "70%"
+      , "float" => "left"
+      , "height" => "768px"
+      , "overflow-y" => "auto"
+      , "border-right" => "2px solid black"
       ]
