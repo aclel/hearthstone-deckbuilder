@@ -13,7 +13,7 @@ import Deck.Action exposing (Action(..))
 
 renderCard : Signal.Address Action -> Card -> Html
 renderCard address card =
-    li  [ cardStyle]
+    li  [ cardStyle, onClick address (RemoveCard card) ]
         [ h2 [] [text ((toString card.cost) ++ " " ++ card.name)] ]
 
 cardStyle : Attribute

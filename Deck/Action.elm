@@ -6,3 +6,4 @@ import Deck.Model exposing (Model)
 type Action 
     = NoOp
     | AddCard Card -- Triggered from outside Deck
+    | RemoveCard Card
