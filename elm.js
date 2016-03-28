@@ -11372,13 +11372,28 @@ Elm.DeckBuilderMain.make = function (_elm) {
    $Deck$Feature = Elm.Deck.Feature.make(_elm),
    $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $Task = Elm.Task.make(_elm);
    var _op = {};
-   var deckBuilderMainView = F2(function (cardListView,deckView) {    return A2($Html.div,_U.list([]),_U.list([cardListView,deckView]));});
+   _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
+   var bannerStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","100%")
+                                                    ,A2(_op["=>"],"height","120px")
+                                                    ,A2(_op["=>"],"padding-top","10px")
+                                                    ,A2(_op["=>"],"padding-bottom","10px")
+                                                    ,A2(_op["=>"],"background-color","#000")
+                                                    ,A2(_op["=>"],"display","flex")
+                                                    ,A2(_op["=>"],"align-items","center")
+                                                    ,A2(_op["=>"],"justify-content","center")]));
+   var logoStyle = $Html$Attributes.style(_U.list([A2(_op["=>"],"width","30%")]));
+   var logo = function (url) {    return A2($Html.img,_U.list([$Html$Attributes.src(url),logoStyle]),_U.list([]));};
+   var banner = A2($Html.div,_U.list([bannerStyle]),_U.list([logo("assets/hearthstone_logo.png")]));
+   var deckBuilderMainView = F2(function (cardListView,deckView) {
+      return A2($Html.div,_U.list([]),_U.list([banner,A2($Html.div,_U.list([]),_U.list([cardListView,deckView]))]));
+   });
    var deckMailbox = $Signal.mailbox($Deck$Action.AddCard($Common$Model.testCard));
    var deckFeature = $Deck$Feature.createDeckFeature({inputs: _U.list([deckMailbox.signal]),outputs: {}});
    var cardListMailbox = $Signal.mailbox($CardList$Action.ShowList($CardList$Model.initialModel));

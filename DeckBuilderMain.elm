@@ -2,7 +2,8 @@ module DeckBuilderMain (deckBuilderMainFeature) where
 
 import Common.Model exposing (Card, testCard)
 import Effects exposing (Never)
-import Html exposing (Html, div)
+import Html exposing (..)
+import Html.Attributes exposing (style, src)
 import Task exposing (Task)
 import CardList.Action exposing (Action(ShowList))
 import CardList.Feature exposing (CardListFeature, createCardListFeature)
@@ -37,12 +38,51 @@ deckFeature =
             { }
         }
 
+-- Allow the use of => operator when defining styles
+(=>) = (,)
+
 deckBuilderMainView : Html -> Html -> Html
 deckBuilderMainView cardListView deckView =
     div
         []
-        [ cardListView
-        , deckView
+        [
+            banner,
+            div []
+            [cardListView
+            , deckView
+            ]
+        ]
+
+banner : Html
+banner =
+    div 
+        [ bannerStyle ]
+        [
+            logo "assets/hearthstone_logo.png"
+        ]
+
+bannerStyle : Attribute
+bannerStyle =
+    style
+        [ "width" => "100%"
+        , "height" => "120px"
+        , "padding-top" => "10px"
+        , "padding-bottom" => "10px"
+        , "background-color" => "#000"
+        , "display" => "flex"
+        , "align-items" => "center"
+        , "justify-content" => "center"
+        ]
+
+
+logo : String -> Html
+logo url =
+    img [ src url, logoStyle] []
+
+logoStyle : Attribute
+logoStyle =
+    style 
+        [ "width" => "30%"
         ]
 
 html : Signal Html
